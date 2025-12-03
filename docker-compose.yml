@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  paystack-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: paystack-integration
+    ports:
+      - "8000:8000"
+    environment:
+      - PAYSTACK_SECRET_KEY=${PAYSTACK_SECRET_KEY}
+      - PAYSTACK_PUBLIC_KEY=${PAYSTACK_PUBLIC_KEY}
+      - PAYSTACK_BASE_URL=${PAYSTACK_BASE_URL:-https://api.paystack.co}
+      - APP_URL=${APP_URL:-http://localhost:8000}
+      - DEBUG=${DEBUG:-False}
+    env_file:
+      - .env
+    volumes:
+      # Mount code for development (comment out for production)
+      - ./templates:/app/templates
+      - ./static:/app/static
+    restart: unless-stopped
+    networks:
+      - paystack-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+networks:
+  paystack-network:
+    driver: bridge
+
+# Optional: Add a reverse proxy with SSL
+# Uncomment below to add nginx with SSL support
+#
+#  nginx:
+#    image: nginx:alpine
+#    container_name: paystack-nginx
+#    ports:
+#      - "80:80"
+#      - "443:443"
+#    volumes:
+#      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+#      - ./ssl:/etc/nginx/ssl:ro
+#    depends_on:
+#      - paystack-app
+#    networks:
+#      - paystack-network
+#    restart: unless-stopped

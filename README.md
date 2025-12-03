@@ -37,6 +37,51 @@ A comprehensive payment integration platform built with FastAPI that demonstrate
 - **Frontend**: HTML, CSS, JavaScript, Bootstrap 5
 - **Payment Gateway**: Paystack
 - **Templating**: Jinja2
+- **Deployment**: Docker, Docker Compose
+
+## 🐳 Quick Start with Docker (Recommended)
+
+The fastest way to get started!
+
+### Using Make (Simplest)
+
+```bash
+# Build and run in one command
+make deploy
+
+# Or step by step
+make build
+make run
+```
+
+### Using Docker directly
+
+```bash
+# Build the image
+docker build -t paystack-app .
+
+# Run the container
+docker run -d -p 8000:8000 --env-file .env --name paystack-app paystack-app
+
+# View at http://localhost:8000
+```
+
+### Using Docker Compose
+
+```bash
+# Start in background
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Stop
+docker-compose down
+```
+
+**📚 Full Docker guide:** See [DOCKER.md](DOCKER.md) for complete deployment options
+
+---
 
 ## 📦 Installation
 
